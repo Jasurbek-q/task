@@ -8,6 +8,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-this-in-production')
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# ALLOWED_HOSTS = ['*']
+
+ALLOWED_HOSTS = ['task-kdvs.onrender.com']
+# ALLOWED_HOSTS = [
+#     'task-kdvs.onrender.com',
+#     'localhost',
+#     '127.0.0.1'
+# ]
+
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
