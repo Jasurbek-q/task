@@ -1,0 +1,58 @@
+{% extends 'tasks/base.html' %}
+{% block title %}My Tasks{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <h1 style="font-size:1.6rem;">My Tasks</h1>
+    <a href="{% url 'task_create' %}" class="btn btn-primary">+ New Task</a>
+</div>
+
+<!-- Filter -->
+<div class="card" style="margin-bottom:20px; padding:16px;">
+    <form method="get" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <label style="font-weight:600;">Filter by status:</label>
+        <select name="status" onchange="this.form.submit()" style="padding:8px 12px; border-radius:6px; border:1px solid #ddd;">
+            <option value="">All</option>
+            {% for val, label in status_choices %}
+            <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        {% if status_filter %}
+        <a href="/" class="btn btn-secondary" style="padding:7px 14px;">Clear</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Task list -->
+{% if tasks %}
+<div style="display:flex; flex-direction:column; gap:12px;">
+    {% for task in tasks %}
+    <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:16px 24px;">
+        <div>
+            <a href="{% url 'task_detail' task.pk %}" style="font-size:1.05rem; font-weight:600; color:#2c3e50; text-decoration:none;">
+                {{ task.title }}
+            </a>
+            <div style="margin-top:6px; display:flex; gap:10px; flex-wrap:wrap;">
+                <span style="font-size:0.8rem; padding:3px 10px; border-radius:20px; font-weight:600;
+                    background: {% if task.status == 'done' %}#d4edda{% elif task.status == 'in_progress' %}#fff3cd{% else %}#f8d7da{% endif %};
+                    color: {% if task.status == 'done' %}#155724{% elif task.status == 'in_progress' %}#856404{% else %}#721c24{% endif %};">
+                    {{ task.get_status_display }}
+                </span>
+                {% if task.due_date %}
+                <span style="font-size:0.8rem; color:#888;">📅 {{ task.due_date }}</span>
+                {% endif %}
+                <span style="font-size:0.8rem; color:#aaa;">Created: {{ task.created_at|date:"d M Y" }}</span>
+            </div>
+        </div>
+        <div style="display:flex; gap:8px;">
+            <a href="{% url 'task_edit' task.pk %}" class="btn btn-secondary" style="padding:7px 14px;">Edit</a>
+            <a href="{% url 'task_delete' task.pk %}" class="btn btn-danger" style="padding:7px 14px;">Delete</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card" style="text-align:center; padding:40px; color:#888;">
+    <p style="font-size:1.1rem;">No tasks found. <a href="{% url 'task_create' %}">Create your first task!</a></p>
+</div>
+{% endif %}
+{% endblock %}
