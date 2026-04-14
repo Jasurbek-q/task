@@ -15,10 +15,11 @@ SECRET_KEY = os.getenv(
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 # ✅ FIX: universal Render-safe ALLOWED_HOSTS
-ALLOWED_HOSTS = os.getenv(
-    'ALLOWED_HOSTS',
-    '.onrender.com,localhost,127.0.0.1'
-).split(',')
+ALLOWED_HOSTS = [
+    '.onrender.com',
+    'localhost',
+    '127.0.0.1'
+]
 
 # APPS
 INSTALLED_APPS = [
